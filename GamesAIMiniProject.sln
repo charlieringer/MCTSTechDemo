@@ -1,0 +1,23 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{25A207A6-D627-B913-6F83-E998E415C423}") = "GamesAIMiniProject", "Assembly-CSharp.csproj", "{7A603E0E-7CB3-65EE-69C7-09806B1363C0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7A603E0E-7CB3-65EE-69C7-09806B1363C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A603E0E-7CB3-65EE-69C7-09806B1363C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A603E0E-7CB3-65EE-69C7-09806B1363C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A603E0E-7CB3-65EE-69C7-09806B1363C0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal

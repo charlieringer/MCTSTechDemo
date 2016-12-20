@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 9be116490c1ad4ac6a8de6d35b256639
+timeCreated: 1482234211
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - renderer: {instanceID: 0}
+  - preFabCounter: {fileID: 158562, guid: 6880813096f964bc49543dd7be23d881, type: 2}
+  - tileTexture: {fileID: 2800000, guid: 2b3878a72256d4aa7ab04a4c7d4cd065, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

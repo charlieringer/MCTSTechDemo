@@ -1,0 +1,19 @@
+﻿<Properties StartupItem="Assembly-CSharp.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GameMaster.cs">
+    <Files>
+      <File FileName="Assets/Scripts/AI.cs" Line="3" Column="1" />
+      <File FileName="Assets/Scripts/GameMaster.cs" Line="22" Column="30" />
+      <File FileName="Assets/Scripts/Tile.cs" Line="50" Column="11" />
+      <File FileName="Assets/Scripts/State.cs" Line="48" Column="1" />
+      <File FileName="Assets/Scripts/AIState.cs" Line="45" Column="81" />
+      <File FileName="Assets/Scripts/OrderAndChaosGame.cs" Line="8" Column="18" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/Users/Charlie/Google Drive/_Year3/Games AI/Work/GameAICW1/GamesAIMiniProject/Assets/Scripts/AI.cs" line="110" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
