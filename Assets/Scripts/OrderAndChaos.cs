@@ -8,6 +8,9 @@ public class OrderAndChaos : GameMaster {
 	public Text role;
 	public Text colour;
 	public Text turn;
+	public Text winlose;
+	public GameObject thinkingPopup;
+	public GameObject endGameMenu;
 
 	void Start () {
 		if (GameData.playerIndex == 1) {
@@ -42,6 +45,7 @@ public class OrderAndChaos : GameMaster {
 	void Update () {
 		if (!playersTurn && gamePlaying) {
 			turn.text = "AIs turn";
+			thinkingPopup.SetActive (true);
 			if (!brain.started) {
 				OCAIState preState = new OCAIState (gameState, aiPlayerIndx, null, 0);
 				aiThread = new Thread (new ThreadStart (() => brain.runAI (preState)));
@@ -49,13 +53,18 @@ public class OrderAndChaos : GameMaster {
 			}
 			if (brain.done) {
 				OCAIState postState = (OCAIState)brain.next;
+				if (postState == null) {
+					Debug.Log ("ERROR: Null State.");
+				}
 				gameState = postState.state;
+				brain.reset ();
 				visualiseMove ();
 				playersTurn = true;
-				aiThread.Abort ();
+				aiThread.Join ();
 			}
 
 		} else {
+			thinkingPopup.SetActive (false);
 			turn.text = "Your turn";
 		}
 		if (Input.GetKeyDown ("space")) {
@@ -91,16 +100,30 @@ public class OrderAndChaos : GameMaster {
 	{
 		if (gameState.checkGameEnd (playedPiece)) {
 			gamePlaying = false;
+			if (GameData.playerIndex == 1) {
+				winlose.text = "You Won!";
+			} else {
+				winlose.text = "You Lost!";
+			}
+			endGameMenu.SetActive (true);
 			return;
 		}
 		if (gameState.numbPiecesPlayed == 36) {
 			gamePlaying = false;
+			if (GameData.playerIndex == 1) {
+				winlose.text = "You Lost!";
+			} else {
+				winlose.text = "You Won!";
+			}
+			endGameMenu.SetActive (true);
 			return;
 		}
 	}
 
 	private void visualiseMove()
 	{
+		Debug.Log ("Visualising Move.");
+		bool found = false;
 		foreach(GameObject tile in tiles)
 		{
 			int pX = gameState.lastPiecePlayed [0];
@@ -109,8 +132,14 @@ public class OrderAndChaos : GameMaster {
 			int tX = tile.GetComponent<Tile> ().x;
 			int tY = tile.GetComponent<Tile> ().y;
 			if (pX == tX && pY == tY) {
+				Debug.Log (pX + " " + pY);
 				tile.GetComponent<Tile>().aiPlayHere(gameState.lastPiecePlayed [2]);
+				found = true;
 			}
 		}
+		if (!found) {
+			Debug.Log ("Error: Could not locate AI move.");
+		}
+		checkState (gameState.lastPiecePlayed);
 	}
 }

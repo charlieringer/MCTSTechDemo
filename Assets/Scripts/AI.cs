@@ -13,17 +13,22 @@ public class AI
 
 	public AI ()
 	{
-		maxIters = 8000;
+		maxIters = 40;
 		exploreWeight = 0.5f;
+	}
+
+	public void reset()
+	{
+		started = false;
+		done = false;
+		next = null;
 	}
 
 	public void runAI(AIState initalState)
 	{
-		done = false;
 		started = true;
 		next = run (initalState);
 		done = true;
-		started = false;
 	}
 
 	public AIState run(AIState initalState)
