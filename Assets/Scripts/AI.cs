@@ -1,17 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
+//using UnityEngine;
 
 public class AI
 {
 	int maxIters;
 	float exploreWeight;
+	public bool done;
+	public bool started;
+	public AIState next;
 	System.Random randGen = new System.Random ();
 
 	public AI ()
 	{
-		maxIters = 4000;
+		maxIters = 8000;
 		exploreWeight = 0.5f;
+	}
+
+	public void runAI(AIState initalState)
+	{
+		done = false;
+		started = true;
+		next = run (initalState);
+		done = true;
+		started = false;
 	}
 
 	public AIState run(AIState initalState)
@@ -23,25 +35,30 @@ public class AI
 		while (numbIters < maxIters) {
 			//Debug.Log("Loop: " + numbIters);
 			numbIters++;
-			if (numbIters > 10) {
+			if (numbIters > 100) {
 				numbIters += 0;
 			}
 
 			double bestScore = -1;
 			int bestIndex = -1;
 			for(int i = 0; i < children.Count; i++){
-				Debug.Assert (children [i].parent != null);
+				if (children [i].terminal () == children[i].playerIndex) {
+					return children [i];
+				}
+				//Debug.Assert (children [i].parent != null);
 				
-				int wins = children[i].wins;
-				int games = children[i].totGames;
+				double wins = children[i].wins;
+				double games = children[i].totGames;
 
 				double score = 1.0;
-				if (games > 0) score = wins/games;
+				if (games > 0) {
+					score = wins / games;
+				}
 
 				//UBT (Upper Confidence Bound 1 applied to trees) function for determining
 				//How much we want to explore vs exploit.
 				//Because we want to change things the constant is configurable.
-				double exploreRating = exploreWeight*Math.Sqrt(2*(Math.Log(initalState.totGames+1)/(games+0.1)));
+				double exploreRating = exploreWeight*Math.Sqrt(Math.Log(initalState.totGames+1)/(games+0.1));
 
 				double totalScore = score+exploreRating;
 				//Debug.Log ("Child " + i + " has a score of " + totalScore);
@@ -60,18 +77,19 @@ public class AI
 				bestIndex = -1;
 
 				for(int i = 0; i < bestChild.children.Count; i++){
-
 					//Scores as per the previous part
-					int wins = bestChild.children[i].wins;
-					int games = bestChild.children[i].totGames;
+					double wins = bestChild.children[i].wins;
+					double games = bestChild.children[i].totGames;
 
 					double score = 1.0;
-					if (games > 0) score = wins/games;
+					if (games > 0) {
+						score = wins / games;
+					}
 
 					//UBT (Upper Confidence Bound 1 applied to trees) function for determining
 					//How much we want to explore vs exploit.
 					//Because we want to change things the constant is configurable.
-					double exploreRating = exploreWeight*Math.Sqrt(2*(Math.Log(initalState.totGames+1)/(games+0.1)));
+					double exploreRating = exploreWeight*Math.Sqrt(Math.Log(initalState.totGames+1)/(games+0.1));
 
 					double totalScore = score+exploreRating;
 
@@ -92,6 +110,7 @@ public class AI
 		for(int i = 0; i < children.Count; i++)
 		{
 			int games = children[i].totGames;
+			//Debug.Log ("Child " + i + " played " + games + " times. It won " + (double)children[i].wins/(double)games + "%.");
 			if(games >= mostGames)
 			{
 				mostGames = games;
@@ -99,9 +118,9 @@ public class AI
 			}
 			//Debug.Log ("Child " + i + " played " + games);
 		}
-		Debug.Log ("Wins: " + initalState.wins);
-		Debug.Log ("Losses: " + initalState.losses);
-		Debug.Log ("Max Depth reached: " + maxDepth);
+		//Debug.Log ("Child Selected: " + bestMove);
+		//Debug.Log ("Max Depth reached: " + maxDepth);
+
 		return children[bestMove];
 	}
 
@@ -112,7 +131,7 @@ public class AI
 		//rolloutStart.children = children;	
 
 		if (children.Count == 0) {
-			Debug.Log("Error: No Children generated from inital state.");
+			//Debug.Log("Error: No Children generated from inital state.");
 			return;
 		}
 
@@ -128,12 +147,16 @@ public class AI
 			} else {
 				children = children [index].generateChildren();
 				if (children.Count == 0) {
-					Debug.Log("Error: End State not recognised.");
+					//Debug.Log("Error: End State not recognised.");
 					break;
 				}
 			}
 		}
 		//Reset the children as these are not 'real' children but just ones for the roll out. 
+		foreach( AIState child in rolloutStart.children)
+		{
+			child.children = new List<AIState>();
+		}
 		//rolloutStart.children = null;
 	}
 }

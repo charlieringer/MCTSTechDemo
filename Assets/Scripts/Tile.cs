@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Tile : MonoBehaviour {
 
-	public Renderer renderer;
+	public Renderer rend;
 	private GameMaster master;
 	public bool canPress;
 	public int x;
@@ -15,26 +15,19 @@ public class Tile : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		renderer.material.color = Color.grey;
-		renderer.material.mainTexture =  tileTexture;
+		rend.material.mainTexture =  tileTexture;
 		counter = (GameObject)Instantiate(preFabCounter, new Vector3 ((x+(0.1f*x)), 0.1f, (y+(0.1f*y))), Quaternion.identity);
 		counter.SetActive (false);
 		counter.GetComponent<Collider> ().enabled = false;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-
-	}
 
 	void OnMouseOver()
 	{
-		renderer.material.color = Color.grey;
-		renderer.material.mainTexture =  tileTexture;
+		rend.material.mainTexture =  tileTexture;
 		if (canPress) {
-			renderer.material.color = Color.green;
+			rend.material.color = Color.green;
 			counter.SetActive (true);
-			if (master.selectedPiece == 1) {
+			if (master.selectedColour == 1) {
 				counter.GetComponent<Renderer> ().material.color = Color.white;
 			} else {
 				counter.GetComponent<Renderer> ().material.color = Color.black;
@@ -53,8 +46,8 @@ public class Tile : MonoBehaviour {
 
 	void OnMouseExit()
 	{
-		renderer.material.color = Color.grey;
-		renderer.material.mainTexture =  tileTexture;
+		rend.material.mainTexture =  tileTexture;
+		rend.material.color = Color.white;
 		counter.SetActive (false);
 	}
 

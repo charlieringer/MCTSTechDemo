@@ -31,7 +31,6 @@ public abstract class AIState
 		totGames++;
 		if (parent != null)
 			parent.addWin ();
-
 	}
 
 	public abstract List<AIState> generateChildren ();
