@@ -9,6 +9,7 @@ public class AI
 	public bool done;
 	public bool started;
 	public AIState next;
+	int maxRollout = 20;
 	System.Random randGen = new System.Random ();
 
 	public AI ()
@@ -138,9 +139,11 @@ public class AI
 			//Debug.Log("Error: No Children generated from inital state.");
 			return;
 		}
-
+		int count = 0;
 		while(!terminalStateFound)
 		{
+			if (count >= maxRollout)
+				rolloutStart.addDraw ();
 			int index = randGen.Next(children.Count);
 			int endResult = children[index].terminal ();
 			if(endResult > 0)

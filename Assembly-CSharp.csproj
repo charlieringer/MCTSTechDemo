@@ -52,7 +52,9 @@
      <Compile Include="Assets\Scripts\GameData.cs" />
      <Compile Include="Assets\Scripts\GameMaster.cs" />
      <Compile Include="Assets\Scripts\Go.cs" />
+     <Compile Include="Assets\Scripts\GoStates.cs" />
      <Compile Include="Assets\Scripts\LoadSceneByIndx.cs" />
+     <Compile Include="Assets\Scripts\OCstates.cs" />
      <Compile Include="Assets\Scripts\OrderAndChaos.cs" />
      <Compile Include="Assets\Scripts\State.cs" />
      <Compile Include="Assets\Scripts\Tile.cs" />

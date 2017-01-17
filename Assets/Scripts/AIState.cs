@@ -33,60 +33,13 @@ public abstract class AIState
 			parent.addWin ();
 	}
 
+	public void addDraw(){
+		totGames++;
+		if (parent != null)
+			parent.addDraw ();
+	}
+
 	public abstract List<AIState> generateChildren ();
 	public abstract int terminal ();
 }
 
-public class OCAIState : AIState
-{
-	public OCState state;
-
-	public OCAIState(OCState _state, int pIndex, AIState _parent, int _depth) : base(pIndex, _parent, _depth)
-	{
-		state = _state;
-	}
-
-	public override List<AIState> generateChildren()
-	{
-		List<AIState> children = new List<AIState> ();
-
-		int newPIndx = 0;
-		if (playerIndex == 1)
-			newPIndx = 2;
-		else
-			newPIndx = 1;
-		int newNumbPieces = state.numbPiecesPlayed+1;
-
-		for (int x = 0; x < 6; x++) {
-			for (int y = 0; y < 6; y++) {
-				int pieceAtPosition = state.getBoard () [x, y];
-				if (pieceAtPosition == 0) {
-					int[,] newBoard = (int[,])state.getBoard().Clone ();
-					newBoard [x, y] = 1;
-					OCState childState = new OCState (newBoard, newNumbPieces, new int[3]{ x, y, 1});
-					OCAIState childAIState = new OCAIState (childState, newPIndx, this, depth+1);
-					children.Add (childAIState);
-
-					int[,] newBoard2 = (int[,])state.getBoard().Clone ();
-					newBoard2 [x, y] = 2;
-					OCState childState2 = new OCState (newBoard2, newNumbPieces, new int[3]{ x, y, 2});
-					OCAIState childAIState2 = new OCAIState (childState2, newPIndx, this, depth+1);
-					children.Add (childAIState2);
-				}
-			}
-		}
-		this.children = children;
-		return children;
-	}
-
-	public override int terminal()
-	{
-		if (state.checkGameEnd ()) {
-			return 1;
-		}
-		if (state.numbPiecesPlayed == 36) {
-			return 2;
-		}
-		return 0;
-	}
-}

@@ -1,12 +1,10 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/State.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GoStates.cs">
     <Files>
-      <File FileName="Assets/Scripts/AI.cs" Line="31" Column="15" />
-      <File FileName="Assets/Scripts/OrderAndChaos.cs" Line="95" Column="1" />
-      <File FileName="Assets/Scripts/State.cs" Line="11" Column="3" />
-      <File FileName="Assets/Scripts/AIState.cs" Line="60" Column="1" />
-      <File FileName="Assets/Scripts/GameMaster.cs" Line="4" Column="24" />
+      <File FileName="Assets/Scripts/AI.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GoStates.cs" Line="70" Column="1" />
+      <File FileName="Assets/Scripts/Go.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
