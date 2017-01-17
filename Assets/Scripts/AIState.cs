@@ -39,9 +39,9 @@ public abstract class AIState
 
 public class OCAIState : AIState
 {
-	public State state;
+	public OCState state;
 
-	public OCAIState(State _state, int pIndex, AIState _parent, int _depth) : base(pIndex, _parent, _depth)
+	public OCAIState(OCState _state, int pIndex, AIState _parent, int _depth) : base(pIndex, _parent, _depth)
 	{
 		state = _state;
 	}
@@ -63,13 +63,13 @@ public class OCAIState : AIState
 				if (pieceAtPosition == 0) {
 					int[,] newBoard = (int[,])state.getBoard().Clone ();
 					newBoard [x, y] = 1;
-					State childState = new State (newBoard, newNumbPieces, new int[3]{ x, y, 1});
+					OCState childState = new OCState (newBoard, newNumbPieces, new int[3]{ x, y, 1});
 					OCAIState childAIState = new OCAIState (childState, newPIndx, this, depth+1);
 					children.Add (childAIState);
 
 					int[,] newBoard2 = (int[,])state.getBoard().Clone ();
 					newBoard2 [x, y] = 2;
-					State childState2 = new State (newBoard2, newNumbPieces, new int[3]{ x, y, 2});
+					OCState childState2 = new OCState (newBoard2, newNumbPieces, new int[3]{ x, y, 2});
 					OCAIState childAIState2 = new OCAIState (childState2, newPIndx, this, depth+1);
 					children.Add (childAIState2);
 				}

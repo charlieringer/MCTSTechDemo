@@ -1,18 +1,34 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class State
+public abstract class State
 {
 	public int[,] board = new int[6,6];
 	public int numbPiecesPlayed;
 	public int[] lastPiecePlayed;
 
-	public State()
+	public int[,] getBoard() {
+		return board;
+	}
+
+	public void playPiece(int[] moveData)
+	{
+		board [moveData [0], moveData [1]] = moveData [2];
+		numbPiecesPlayed++;
+	}
+
+	public abstract bool checkGameEnd ();
+	public abstract bool checkGameEnd(int[] piecePlayed);
+}
+
+public class OCState : State
+{
+	public OCState()
 	{
 		numbPiecesPlayed = 0;
 	}
 
-	public State (int[,] _board, int _numbPiecesPlayed, int[] _lastPiecePlayed)
+	public OCState (int[,] _board, int _numbPiecesPlayed, int[] _lastPiecePlayed)
 	{
 		board = _board;
 		numbPiecesPlayed = _numbPiecesPlayed;
@@ -31,12 +47,12 @@ public class State
 		}
 	}
 
-	public bool checkGameEnd()
+	public override bool checkGameEnd()
 	{
 		return checkGameEnd(lastPiecePlayed);
 	}
 
-	public bool checkGameEnd(int[] piecePlayed)
+	public override bool checkGameEnd(int[] piecePlayed)
 	{
 		int x = piecePlayed [0];
 		int y = piecePlayed [1];
@@ -73,15 +89,42 @@ public class State
 		}
 		return false;
 	}
+}
 
-	public int[,] getBoard() {
-		return board;
+public class GOState : State
+{
+	public GOState()
+	{
+		numbPiecesPlayed = 0;
 	}
 
-	public void playPiece(int[] moveData)
+	public GOState (int[,] _board, int _numbPiecesPlayed, int[] _lastPiecePlayed)
 	{
-		board [moveData [0], moveData [1]] = moveData [2];
-		numbPiecesPlayed++;
+		board = _board;
+		numbPiecesPlayed = _numbPiecesPlayed;
+		lastPiecePlayed = _lastPiecePlayed;
+		int localPieceCount = 0;
+		for (int x = 0; x < 6; x++) {
+			for (int y = 0; y < 6; y++)
+			{
+				if (board [x, y] > 0) {
+					localPieceCount++;
+				}
+			}
+		}
+		if (localPieceCount != numbPiecesPlayed) {
+			Debug.Log ("Error: Piece count mismatch");
+		}
+	}
+
+	public override bool checkGameEnd()
+	{
+		return checkGameEnd(lastPiecePlayed);
+	}
+
+	public override bool checkGameEnd(int[] piecePlayed)
+	{
+		return false;
 	}
 }
 

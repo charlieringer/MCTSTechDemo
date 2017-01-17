@@ -3,22 +3,21 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using System.Threading;
 
-public class OrderAndChaos : GameMaster {
-	
-	public Text role;
+public class Go : GameMaster {
+
 	public Text colour;
 	public Text turn;
 	public Text winlose;
 
 	void Start () {
 		if (GameData.playerIndex == 1) {
-			role.text = "You are playing as Order";
 			turn.text = "Your turn";
+			colour.text = "Selected colour: White";
 			playerIndx = 1;
 			playersTurn = true;
 		} else {
-			role.text = "You are playing as Chaos";
 			turn.text = "AIs turn";
+			colour.text = "Selected colour: Black";
 			playerIndx = 2;
 			playersTurn = false;
 		}
@@ -34,9 +33,8 @@ public class OrderAndChaos : GameMaster {
 				tile.GetComponent<Tile>().preFabCounter = preFabCounter;
 			}
 		} 
-		gameState = new OCState ();
+		gameState = new GOState ();
 		selectedColour = 1;
-		colour.text = "Selected playing piece: White";
 	}
 
 	// Update is called once per frame
@@ -45,8 +43,8 @@ public class OrderAndChaos : GameMaster {
 			turn.text = "AIs turn";
 			thinkingPopup.SetActive (true);
 			if (!brain.started) {
-				OCAIState preState = new OCAIState ((OCState)gameState, playerIndx, null, 0);
-				aiThread = new Thread (new ThreadStart (() => brain.runAI (preState)));
+//				OCAIState preState = new OCAIState (gameState, playerIndx, null, 0);
+			//	aiThread = new Thread (new ThreadStart (() => brain.runAI (preState)));
 				aiThread.Start ();
 			}
 			if (brain.done) {
@@ -64,17 +62,6 @@ public class OrderAndChaos : GameMaster {
 		} else {
 			thinkingPopup.SetActive (false);
 			turn.text = "Your turn";
-		}
-		if (Input.GetKeyDown ("space")) {
-			if (selectedColour == 1) {
-				colour.text = "Selected playing piece: Black";
-				selectedColour = 2;
-				selectedColour = 2;
-			} else {
-				colour.text = "Selected playing piece: White";
-				selectedColour = 1;
-				selectedColour = 1;
-			}
 		}
 	}
 
@@ -96,26 +83,26 @@ public class OrderAndChaos : GameMaster {
 
 	public void checkState (int[] playedPiece)
 	{
-		if (gameState.checkGameEnd (playedPiece)) {
-			gamePlaying = false;
-			if (GameData.playerIndex == 1) {
-				winlose.text = "You Won!";
-			} else {
-				winlose.text = "You Lost!";
-			}
-			endGameMenu.SetActive (true);
-			return;
-		}
-		if (gameState.numbPiecesPlayed == 36) {
-			gamePlaying = false;
-			if (GameData.playerIndex == 1) {
-				winlose.text = "You Lost!";
-			} else {
-				winlose.text = "You Won!";
-			}
-			endGameMenu.SetActive (true);
-			return;
-		}
+//		if (gameState.checkGameEnd (playedPiece)) {
+//			gamePlaying = false;
+//			if (GameData.playerIndex == 1) {
+//				winlose.text = "You Won!";
+//			} else {
+//				winlose.text = "You Lost!";
+//			}
+//			endGameMenu.SetActive (true);
+//			return;
+//		}
+//		if (gameState.numbPiecesPlayed == 36) {
+//			gamePlaying = false;
+//			if (GameData.playerIndex == 1) {
+//				winlose.text = "You Lost!";
+//			} else {
+//				winlose.text = "You Won!";
+//			}
+//			endGameMenu.SetActive (true);
+//			return;
+//		}
 	}
 
 	private void visualiseMove()
@@ -139,3 +126,4 @@ public class OrderAndChaos : GameMaster {
 		checkState (gameState.lastPiecePlayed);
 	}
 }
+

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-//using UnityEngine;
+using UnityEngine;
 
 public class AI
 {
@@ -13,7 +13,7 @@ public class AI
 
 	public AI ()
 	{
-		maxIters = 40;
+		maxIters = 2000;
 		exploreWeight = 0.5f;
 	}
 
@@ -115,16 +115,15 @@ public class AI
 		for(int i = 0; i < children.Count; i++)
 		{
 			int games = children[i].totGames;
-			//Debug.Log ("Child " + i + " played " + games + " times. It won " + (double)children[i].wins/(double)games + "%.");
+			Debug.Log ("Child " + i + " played " + games + " times. It won " + (double)children[i].wins/(double)games + ".");
 			if(games >= mostGames)
 			{
 				mostGames = games;
 				bestMove = i;
 			}
-			//Debug.Log ("Child " + i + " played " + games);
 		}
-		//Debug.Log ("Child Selected: " + bestMove);
-		//Debug.Log ("Max Depth reached: " + maxDepth);
+		Debug.Log ("Child Selected: " + bestMove);
+		Debug.Log ("Max Depth reached: " + maxDepth);
 
 		return children[bestMove];
 	}

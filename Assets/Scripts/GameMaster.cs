@@ -6,7 +6,7 @@ using System.Threading;
 abstract public class GameMaster : MonoBehaviour {
 	protected AI brain = new AI();
 	protected bool gamePlaying = true;
-	protected int aiPlayerIndx = 2;
+	protected int playerIndx;
 	protected State gameState;
 	protected Thread aiThread;
 
@@ -19,6 +19,9 @@ abstract public class GameMaster : MonoBehaviour {
 	public int gap;
 	public List<GameObject> tiles;
 	public bool playersTurn = true;
+
+	public GameObject thinkingPopup;
+	public GameObject endGameMenu;
 
 	public abstract void spawn (int x, int y);
 }
