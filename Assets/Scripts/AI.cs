@@ -43,9 +43,9 @@ public class AI
 		while (latestTick-startTime < thinkingTime) {
 			latestTick = (DateTime.Now.Ticks)/10000000;
 
-			Debug.Log("Last Tick: " + latestTick);
+			//Debug.Log("Last Tick: " + latestTick);
 			//Debug.Log("Loop: " + numbIters);
-			Debug.Log("Time Spent: " + (latestTick-startTime));
+			//Debug.Log("Time Spent: " + (latestTick-startTime));
 			numbIters++;
 			if (numbIters > 100) {
 				numbIters += 0;
@@ -115,7 +115,7 @@ public class AI
 			if (bestChild.depth > maxDepth)
 				maxDepth = bestChild.depth;
 			rollout(bestChild);
-			Debug.Log ("Rollout finished");
+			//Debug.Log ("Rollout finished");
 		}
 
 			
@@ -139,7 +139,7 @@ public class AI
 
 	void rollout(AIState rolloutStart)
 	{
-		Debug.Log ("Rollout started");
+		//Debug.Log ("Rollout started");
 		bool terminalStateFound = false;
 		List<AIState> children = rolloutStart.generateChildren();
 		//rolloutStart.children = children;	
@@ -166,10 +166,9 @@ public class AI
 				if(endResult == rolloutStart.playerIndex) rolloutStart.addWin();
 				else rolloutStart.addLoss();
 			} else {
-				Debug.Log (count);
-				Debug.Log ("Generating Children started");
+				//Debug.Log (count);
 				children = children [index].generateChildren();
-				Debug.Log ("children generated.");
+				//Debug.Log ("children generated.");
 				if (children.Count == 0) {
 					//Debug.Log("Error: End State not recognised.");
 					break;
