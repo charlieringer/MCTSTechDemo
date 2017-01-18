@@ -146,7 +146,6 @@ public class AI
 			//Debug.Log (count);
 			count++;
 			if (count >= maxRollout) {
-				Debug.Log ("outta time");
 				rolloutStart.addDraw ();
 			}
 			int index = randGen.Next(children.Count);

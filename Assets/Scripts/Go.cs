@@ -8,6 +8,8 @@ public class Go : GameMaster {
 	public Text colour;
 	public Text turn;
 	public Text winlose;
+	public Text whiteScore;
+	public Text blackScore;
 	GOState gameState;
 	private List<GameObject> counters = new List<GameObject>();
 
@@ -62,22 +64,13 @@ public class Go : GameMaster {
 				playersTurn = true;
 				aiThread.Join ();
 				redrawState ();
-				//DEBUG STUFF
-				int[,] printBoard = gameState.board;
-				for(int x = 0; x < 6; x++){
-					string outString = "";
-					for(int y = 0; y < 6; y++)
-					{
-						outString += printBoard[x,y];
-						outString += " ";
-					}
-					Debug.Log(outString);
-				}
 			}
 		} else {
 			thinkingPopup.SetActive (false);
 			turn.text = "Your turn";
 		}
+		whiteScore.text = "White captures: " + gameState.whiteCaptureScore;
+		blackScore.text = "Black captures: " + gameState.blackCaptureScore;
 	}
 
 	public override void spawn(int x, int y)
@@ -101,6 +94,7 @@ public class Go : GameMaster {
 	{
 		if (gameState.checkGameEnd (playedPiece)) {
 			gamePlaying = false;
+			Debug.Log ("Winner: " + gameState.winner);
 			if (gameState.winner == playerIndx) {
 				winlose.text = "You Won!";
 			} else {

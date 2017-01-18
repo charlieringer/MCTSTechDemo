@@ -5,8 +5,8 @@ using UnityEngine;
 public class GOState : State
 {
 	public int winner = -1;
-	int whiteCaptureScore = 0;
-	int blackCaptureScore = 0;
+	public int whiteCaptureScore = 0;
+	public int blackCaptureScore = 0;
 	public bool illegalState = false;
 
 	public GOState()
@@ -40,12 +40,6 @@ public class GOState : State
 
 	public void checkForCaptures (int[] _lastPiecePlayed)
 	{
-		//Debug.Log ("Checking liberties for self.");
-		if (!hasLiberty (_lastPiecePlayed)) {
-			illegalState = true;
-			return;
-		}
-
 		int colour;
 		if (_lastPiecePlayed [2] == 1)
 			colour = 2;
@@ -57,18 +51,22 @@ public class GOState : State
 		int[] adjR = new int[] { _lastPiecePlayed [0]-1, _lastPiecePlayed [1], colour };
 
 		//Debug.Log ("Checking liberties for adjU");
-		if(adjU[1] < 6 && !hasLiberty(adjU))
+		if((adjU[1] < 6) && (board[adjU[0],adjU[1]] != _lastPiecePlayed[2]) && !hasLiberty(adjU))
 			remove(adjU);
 		//Debug.Log ("Checking liberties for adjD");
-		if(adjD[1] > 0 && !hasLiberty(adjD))
+		if(adjD[1] > 0 && (board[adjD[0],adjD[1]] != _lastPiecePlayed[2]) && !hasLiberty(adjD))
 			remove(adjD);
 		//Debug.Log ("Checking liberties for  adjL");
-		if(adjL[0] < 6 && !hasLiberty(adjL))
+		if(adjL[0] < 6 && (board[adjL[0],adjL[1]] != _lastPiecePlayed[2]) && !hasLiberty(adjL))
 			remove(adjL);
 		//Debug.Log ("Checking liberties for  adjR");
-		if(adjR[0] > 0 && !hasLiberty(adjR))
+		if(adjR[0] > 0 && (board[adjR[0],adjR[1]] != _lastPiecePlayed[2]) && !hasLiberty(adjR))
 			remove(adjR);
-		
+		//Debug.Log ("Checking liberties for self.");
+		if (!hasLiberty (_lastPiecePlayed)) {
+			illegalState = true;
+			return;
+		}
 	}
 
 	bool hasLiberty(int[] piece)
@@ -138,10 +136,16 @@ public class GOState : State
 		{
 			int x = frontier[0][0];
 			int y = frontier[0][1];
+			if (board [x, y] == 1) {
+				blackCaptureScore++;
+			} else {
+				whiteCaptureScore++;
+			}
 			board [x, y] = 0;
 
+
 			if (x > 0) {
-				if (board [x - 1, y] == captureIndx) 
+				if (board [x - 1, y] == captureIndx)
 					frontier.Add (new List<int> (){ x - 1, y });
 			}
 
@@ -187,7 +191,7 @@ public class GOState : State
 			for (int y = 0; y < 6; y++) {
 				if (board [x, y] == 1) {
 					whiteScore++;
-				} else if (board [x, y] == 1) {
+				} else if (board [x, y] == 2) {
 					blackScore++;
 				}
 			}
@@ -195,10 +199,10 @@ public class GOState : State
 		whiteScore += whiteCaptureScore;
 		blackScore += blackCaptureScore;
 
-		if (whiteScore > blackScore + 10) {
+		if (whiteScore > (blackScore + 10)) {
 			winner = 1;
 			return true;
-		} else if (blackScore > whiteScore + 10) {
+		} else if (blackScore > (whiteScore + 10)) {
 			winner = 2;
 			return true;
 		}
