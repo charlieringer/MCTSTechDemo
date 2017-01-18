@@ -9,12 +9,12 @@ public class AI
 	public bool done;
 	public bool started;
 	public AIState next;
-	int maxRollout = 20;
+	int maxRollout = 36;
 	System.Random randGen = new System.Random ();
 
 	public AI ()
 	{
-		maxIters = 2000;
+		maxIters = 1000;
 		exploreWeight = 0.5f;
 	}
 
@@ -38,6 +38,7 @@ public class AI
 		int maxDepth = 0; 
 		List<AIState> children = initalState.generateChildren ();
 		//initalState.children = children;
+
 		while (numbIters < maxIters) {
 			//Debug.Log("Loop: " + numbIters);
 			numbIters++;
@@ -47,6 +48,7 @@ public class AI
 
 			double bestScore = -1;
 			int bestIndex = -1;
+
 			for(int i = 0; i < children.Count; i++){
 				if (children [i].terminal () == children[i].playerIndex) {
 					return children [i];
@@ -75,7 +77,6 @@ public class AI
 			}
 			//Debug.Log ("Best Child was " + bestIndex);
 			AIState bestChild = children[bestIndex];
-
 
 			while(bestChild.children.Count > 0)
 			{
@@ -142,10 +143,15 @@ public class AI
 		int count = 0;
 		while(!terminalStateFound)
 		{
-			if (count >= maxRollout)
+			//Debug.Log (count);
+			count++;
+			if (count >= maxRollout) {
+				Debug.Log ("outta time");
 				rolloutStart.addDraw ();
+			}
 			int index = randGen.Next(children.Count);
 			int endResult = children[index].terminal ();
+			//Debug.Log ("terminal checked.");
 			if(endResult > 0)
 			{
 				terminalStateFound = true;
@@ -153,6 +159,7 @@ public class AI
 				else rolloutStart.addLoss();
 			} else {
 				children = children [index].generateChildren();
+				//Debug.Log ("children generated.");
 				if (children.Count == 0) {
 					//Debug.Log("Error: End State not recognised.");
 					break;

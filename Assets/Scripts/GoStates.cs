@@ -18,7 +18,6 @@ public class GOState : State
 	{
 		whiteCaptureScore = oldScores [0];
 		blackCaptureScore = oldScores [1];
-		checkForCaptures (_lastPiecePlayed);
 		board = _board;
 		numbPiecesPlayed = _numbPiecesPlayed;
 		lastPiecePlayed = _lastPiecePlayed;
@@ -31,17 +30,22 @@ public class GOState : State
 				}
 			}
 		}
+		//Debug.Log ("Checking captures.");
+		checkForCaptures (_lastPiecePlayed);
+		//Debug.Log ("Captures checked.");
 		if (localPieceCount != numbPiecesPlayed) {
-			Debug.Log ("Error: Piece count mismatch");
+			//Debug.Log ("Error: Piece count mismatch");
 		}
 	}
 
-	private void checkForCaptures (int[] _lastPiecePlayed)
+	public void checkForCaptures (int[] _lastPiecePlayed)
 	{
+		//Debug.Log ("Checking liberties for self.");
 		if (!hasLiberty (_lastPiecePlayed)) {
 			illegalState = true;
 			return;
 		}
+
 		int colour;
 		if (_lastPiecePlayed [2] == 1)
 			colour = 2;
@@ -52,21 +56,24 @@ public class GOState : State
 		int[] adjL = new int[] { _lastPiecePlayed [0]+1, _lastPiecePlayed [1], colour };
 		int[] adjR = new int[] { _lastPiecePlayed [0]-1, _lastPiecePlayed [1], colour };
 
+		//Debug.Log ("Checking liberties for adjU");
 		if(adjU[1] < 6 && !hasLiberty(adjU))
 			remove(adjU);
-
-		if(adjU[1] > 0 && !hasLiberty(adjD))
+		//Debug.Log ("Checking liberties for adjD");
+		if(adjD[1] > 0 && !hasLiberty(adjD))
 			remove(adjD);
-
-		if(adjU[0] < 6 && !hasLiberty(adjL))
+		//Debug.Log ("Checking liberties for  adjL");
+		if(adjL[0] < 6 && !hasLiberty(adjL))
 			remove(adjL);
-
-		if(adjU[0] > 0 && !hasLiberty(adjR))
+		//Debug.Log ("Checking liberties for  adjR");
+		if(adjR[0] > 0 && !hasLiberty(adjR))
 			remove(adjR);
+		
 	}
 
 	bool hasLiberty(int[] piece)
 	{
+		//Debug.Log ("Checking liberty");
 		List<List<int>> frontier = new List<List<int>>();
 		frontier.Add( new List<int>(){piece[0],piece[1]});
 
@@ -75,9 +82,12 @@ public class GOState : State
 
 		while (frontier.Count > 0)
 		{
+			//Debug.Log ("Looping...");
 			int x = frontier[0][0];
 			int y = frontier[0][1];
+			//Debug.Log ("X = " + x + " Y = " + y);
 
+			//THE BUG IS HERE SOMEWHERE
 			if (x > 0) {
 				if (board [x - 1, y] == 0)
 					return true;
@@ -102,8 +112,8 @@ public class GOState : State
 					frontier.Add (new List<int> (){x, y - 1});
 			}
 
-			if (x > 0) {
-				if (board [x - 1, y] == 0)
+			if (y < 5) {
+				if (board [x, y+1] == 0)
 					return true;
 				else if (board [x, y + 1] == piece [2]) 
 					if (!wasVisited(visited, x, y+1))
@@ -112,13 +122,17 @@ public class GOState : State
 			visited.Add (frontier [0]);
 			frontier.RemoveAt (0);
 		}
+		//Debug.Log ("Finished Checking");
 		return false;
 	}
 
 	void remove(int[] piece)
 	{
+		//Debug.Log ("Removing");
 		List<List<int>> frontier = new List<List<int>>();
 		frontier.Add( new List<int>(){piece[0],piece[1]});
+
+		int captureIndx = piece [2];
 
 		while (frontier.Count > 0)
 		{
@@ -127,23 +141,23 @@ public class GOState : State
 			board [x, y] = 0;
 
 			if (x > 0) {
-				if (board [x - 1, y] == piece [2]) 
-					frontier.Add (new List<int> (){x - 1, y});
+				if (board [x - 1, y] == captureIndx) 
+					frontier.Add (new List<int> (){ x - 1, y });
 			}
 
 			if (x < 5) {
-				if (board [x + 1, y] == piece [2]) 
-					frontier.Add (new List<int> (){x + 1, y});
+				if (board [x + 1, y] == captureIndx) 
+					frontier.Add (new List<int> (){ x + 1, y });
 			}
 
 			if (y > 0) {
-				if (board [x, y - 1] == piece [2]) 
-					frontier.Add (new List<int> (){x, y - 1});
+				if (board [x, y - 1] == captureIndx) 
+					frontier.Add (new List<int> (){ x, y - 1 });
 			}
 
-			if (x > 0) {
-				if (board [x, y + 1] == piece [2]) 
-					frontier.Add (new List<int> (){x, y + 1});
+			if (y < 5) {
+				if (board [x, y + 1] == captureIndx) 
+					frontier.Add (new List<int> (){ x, y + 1 });
 			}
 			frontier.RemoveAt (0);
 		}
@@ -151,10 +165,12 @@ public class GOState : State
 
 	private bool wasVisited(List<List<int>> visited, int x, int y)
 	{
+		//Debug.Log ("Checking if it has been visited");
 		foreach (List<int> node in visited) {
 			if (node [0] == x && node [1] == y)
 				return true;
 		}
+		//Debug.Log ("Finished checking");
 		return false;
 	}
 
@@ -168,7 +184,7 @@ public class GOState : State
 		int blackScore = 0;
 		int whiteScore = 0;
 		for (int x = 0; x < 6; x++) {
-			for (int y = 0; y < 6; x++) {
+			for (int y = 0; y < 6; y++) {
 				if (board [x, y] == 1) {
 					whiteScore++;
 				} else if (board [x, y] == 1) {
@@ -210,6 +226,7 @@ public class GOAIState : AIState
 
 	public override List<AIState> generateChildren()
 	{
+		//Debug.Log ("Generating children.");
 		List<AIState> children = new List<AIState> ();
 
 		int newPIndx = 0;
@@ -226,12 +243,16 @@ public class GOAIState : AIState
 					int[,] newBoard = (int[,])state.getBoard().Clone ();
 					newBoard [x, y] = newPIndx;
 					int[] oldScores = state.getScores ();
+					//Debug.Log ("Making new child.");
 					GOState childState = new GOState (newBoard, newNumbPieces, new int[3]{ x, y, newPIndx}, oldScores);
+					//Debug.Log ("Made new child.");
 					if (childState.illegalState == false) {
 						GOAIState childAIState = new GOAIState (childState, newPIndx, this, depth + 1);
+						//Debug.Log ("Not illegal so adding.");
 						children.Add (childAIState);
 					}
 				}
+
 			}
 		}
 		this.children = children;

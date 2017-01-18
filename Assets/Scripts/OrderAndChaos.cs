@@ -9,6 +9,7 @@ public class OrderAndChaos : GameMaster {
 	public Text colour;
 	public Text turn;
 	public Text winlose;
+	OCState gameState;
 
 	void Start () {
 		if (GameData.playerIndex == 1) {
@@ -45,7 +46,7 @@ public class OrderAndChaos : GameMaster {
 			turn.text = "AIs turn";
 			thinkingPopup.SetActive (true);
 			if (!brain.started) {
-				OCAIState preState = new OCAIState ((OCState)gameState, playerIndx, null, 0);
+				OCAIState preState = new OCAIState (gameState, playerIndx, null, 0);
 				aiThread = new Thread (new ThreadStart (() => brain.runAI (preState)));
 				aiThread.Start ();
 			}
@@ -69,10 +70,8 @@ public class OrderAndChaos : GameMaster {
 			if (selectedColour == 1) {
 				colour.text = "Selected playing piece: Black";
 				selectedColour = 2;
-				selectedColour = 2;
 			} else {
 				colour.text = "Selected playing piece: White";
-				selectedColour = 1;
 				selectedColour = 1;
 			}
 		}

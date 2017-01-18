@@ -7,7 +7,6 @@ abstract public class GameMaster : MonoBehaviour {
 	protected AI brain = new AI();
 	protected bool gamePlaying = true;
 	protected int playerIndx;
-	protected State gameState;
 	protected Thread aiThread;
 
 	public int selectedColour;

@@ -9,7 +9,7 @@ public class Tile : MonoBehaviour {
 	public int x;
 	public int y;
 	public GameObject preFabCounter;
-	GameObject counter;
+	public GameObject counter;
 
 	public Texture tileTexture;
 
