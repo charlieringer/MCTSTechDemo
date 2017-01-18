@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AI
 {
-	int maxIters;
+	double thinkingTime;
 	float exploreWeight;
 	public bool done;
 	public bool started;
@@ -14,7 +14,7 @@ public class AI
 
 	public AI ()
 	{
-		maxIters = 1000;
+		thinkingTime = 4;
 		exploreWeight = 0.5f;
 	}
 
@@ -38,9 +38,14 @@ public class AI
 		int maxDepth = 0; 
 		List<AIState> children = initalState.generateChildren ();
 		//initalState.children = children;
+		double startTime = (DateTime.Now.Ticks)/10000000;
+		double latestTick = startTime;
+		while (latestTick-startTime < thinkingTime) {
+			latestTick = (DateTime.Now.Ticks)/10000000;
 
-		while (numbIters < maxIters) {
+			Debug.Log("Last Tick: " + latestTick);
 			//Debug.Log("Loop: " + numbIters);
+			Debug.Log("Time Spent: " + (latestTick-startTime));
 			numbIters++;
 			if (numbIters > 100) {
 				numbIters += 0;
@@ -110,7 +115,9 @@ public class AI
 			if (bestChild.depth > maxDepth)
 				maxDepth = bestChild.depth;
 			rollout(bestChild);
+			Debug.Log ("Rollout finished");
 		}
+
 			
 		int mostGames = -1;
 		int bestMove = -1;
@@ -132,6 +139,7 @@ public class AI
 
 	void rollout(AIState rolloutStart)
 	{
+		Debug.Log ("Rollout started");
 		bool terminalStateFound = false;
 		List<AIState> children = rolloutStart.generateChildren();
 		//rolloutStart.children = children;	
@@ -147,6 +155,7 @@ public class AI
 			count++;
 			if (count >= maxRollout) {
 				rolloutStart.addDraw ();
+				return;
 			}
 			int index = randGen.Next(children.Count);
 			int endResult = children[index].terminal ();
@@ -157,8 +166,10 @@ public class AI
 				if(endResult == rolloutStart.playerIndex) rolloutStart.addWin();
 				else rolloutStart.addLoss();
 			} else {
+				Debug.Log (count);
+				Debug.Log ("Generating Children started");
 				children = children [index].generateChildren();
-				//Debug.Log ("children generated.");
+				Debug.Log ("children generated.");
 				if (children.Count == 0) {
 					//Debug.Log("Error: End State not recognised.");
 					break;

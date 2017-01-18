@@ -6,7 +6,9 @@ public class GOState : State
 {
 	public int winner = -1;
 	public int whiteCaptureScore = 0;
+	public int lastWhiteScore = 0;
 	public int blackCaptureScore = 0;
+	public int lastBlackScore = 0;
 	public bool illegalState = false;
 
 	public GOState()
@@ -54,13 +56,13 @@ public class GOState : State
 		if((adjU[1] < 6) && (board[adjU[0],adjU[1]] != _lastPiecePlayed[2]) && !hasLiberty(adjU))
 			remove(adjU);
 		//Debug.Log ("Checking liberties for adjD");
-		if(adjD[1] > 0 && (board[adjD[0],adjD[1]] != _lastPiecePlayed[2]) && !hasLiberty(adjD))
+		if(adjD[1] >= 0 && (board[adjD[0],adjD[1]] != _lastPiecePlayed[2]) && !hasLiberty(adjD))
 			remove(adjD);
 		//Debug.Log ("Checking liberties for  adjL");
 		if(adjL[0] < 6 && (board[adjL[0],adjL[1]] != _lastPiecePlayed[2]) && !hasLiberty(adjL))
 			remove(adjL);
 		//Debug.Log ("Checking liberties for  adjR");
-		if(adjR[0] > 0 && (board[adjR[0],adjR[1]] != _lastPiecePlayed[2]) && !hasLiberty(adjR))
+		if(adjR[0] >= 0 && (board[adjR[0],adjR[1]] != _lastPiecePlayed[2]) && !hasLiberty(adjR))
 			remove(adjR);
 		//Debug.Log ("Checking liberties for self.");
 		if (!hasLiberty (_lastPiecePlayed)) {
@@ -197,7 +199,9 @@ public class GOState : State
 			}
 		}
 		whiteScore += whiteCaptureScore;
+		lastWhiteScore = whiteScore;
 		blackScore += blackCaptureScore;
+		lastBlackScore = blackScore;
 
 		if (whiteScore > (blackScore + 10)) {
 			winner = 1;

@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/OrderAndChaos.unity
+- path: Assets/Scenes/Go.unity
   isLoaded: 1
   isActive: 1
