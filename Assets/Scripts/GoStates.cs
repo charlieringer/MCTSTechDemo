@@ -203,10 +203,10 @@ public class GOState : State
 		blackScore += blackCaptureScore;
 		lastBlackScore = blackScore;
 
-		if (whiteScore > (blackScore + 10)) {
+		if (whiteScore > (blackScore + 15)) {
 			winner = 1;
 			return true;
-		} else if (blackScore > (whiteScore + 10)) {
+		} else if (blackScore > (whiteScore + 15)) {
 			winner = 2;
 			return true;
 		}

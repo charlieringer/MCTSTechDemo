@@ -69,8 +69,8 @@ public class Go : GameMaster {
 			thinkingPopup.SetActive (false);
 			turn.text = "Your turn";
 		}
-		whiteScore.text = "White captures: " + gameState.lastWhiteScore;
-		blackScore.text = "Black captures: " + gameState.lastBlackScore;
+		whiteScore.text = "White scores: " + gameState.lastWhiteScore;
+		blackScore.text = "Black scores: " + gameState.lastBlackScore;
 	}
 
 	public override void spawn(int x, int y)
