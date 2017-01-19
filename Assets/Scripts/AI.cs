@@ -14,7 +14,7 @@ public class AI
 
 	public AI ()
 	{
-		thinkingTime = 4;
+		thinkingTime = 5;
 		exploreWeight = 0.5f;
 	}
 
@@ -55,8 +55,11 @@ public class AI
 			int bestIndex = -1;
 
 			for(int i = 0; i < children.Count; i++){
-				if (children [i].terminal () == children[i].playerIndex) {
+				int isTerminalNode = children [i].terminal ();
+				if (isTerminalNode == children [i].playerIndex) {
 					return children [i];
+				} else if (isTerminalNode > 0 && isTerminalNode != children [i].playerIndex) {
+					continue;
 				}
 				//Debug.Assert (children [i].parent != null);
 				

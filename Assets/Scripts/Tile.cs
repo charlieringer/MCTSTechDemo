@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+//Class for the tile
 public class Tile : MonoBehaviour {
 
 	public Renderer rend;
@@ -21,6 +22,7 @@ public class Tile : MonoBehaviour {
 		counter.GetComponent<Collider> ().enabled = false;
 	}
 
+	//When you mouse over 
 	void OnMouseOver()
 	{
 		rend.material.mainTexture =  tileTexture;

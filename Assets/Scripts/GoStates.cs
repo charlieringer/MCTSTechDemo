@@ -6,9 +6,7 @@ public class GOState : State
 {
 	public int winner = -1;
 	public int whiteCaptureScore = 0;
-	public int lastWhiteScore = 0;
 	public int blackCaptureScore = 0;
-	public int lastBlackScore = 0;
 	public bool illegalState = false;
 
 	public GOState()
@@ -140,7 +138,7 @@ public class GOState : State
 			int y = frontier[0][1];
 			if (board [x, y] == 1) {
 				blackCaptureScore++;
-			} else {
+			} else if (board [x, y] == 2) {
 				whiteCaptureScore++;
 			}
 			board [x, y] = 0;
@@ -187,26 +185,11 @@ public class GOState : State
 
 	public override bool checkGameEnd(int[] piecePlayed)
 	{
-		int blackScore = 0;
-		int whiteScore = 0;
-		for (int x = 0; x < 6; x++) {
-			for (int y = 0; y < 6; y++) {
-				if (board [x, y] == 1) {
-					whiteScore++;
-				} else if (board [x, y] == 2) {
-					blackScore++;
-				}
-			}
-		}
-		whiteScore += whiteCaptureScore;
-		lastWhiteScore = whiteScore;
-		blackScore += blackCaptureScore;
-		lastBlackScore = blackScore;
 
-		if (whiteScore > (blackScore + 15)) {
+		if (whiteCaptureScore > (blackCaptureScore + 8)) {
 			winner = 1;
 			return true;
-		} else if (blackScore > (whiteScore + 15)) {
+		} else if (blackCaptureScore > (whiteCaptureScore + 4)) {
 			winner = 2;
 			return true;
 		}
