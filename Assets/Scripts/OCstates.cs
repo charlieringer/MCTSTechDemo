@@ -24,7 +24,7 @@ public class OCState : State
 			}
 		}
 		if (localPieceCount != numbPiecesPlayed) {
-			Debug.Log ("Error: Piece count mismatch");
+			Debug.Log ("ERROR: Piece count mismatch");
 		}
 	}
 

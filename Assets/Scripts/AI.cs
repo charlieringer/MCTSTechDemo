@@ -14,7 +14,7 @@ public class AI
 
 	public AI ()
 	{
-		thinkingTime = 5;
+		thinkingTime = 4;
 		exploreWeight = 0.5f;
 	}
 
@@ -43,9 +43,6 @@ public class AI
 		while (latestTick-startTime < thinkingTime) {
 			latestTick = (DateTime.Now.Ticks)/10000000;
 
-			//Debug.Log("Last Tick: " + latestTick);
-			//Debug.Log("Loop: " + numbIters);
-			//Debug.Log("Time Spent: " + (latestTick-startTime));
 			numbIters++;
 			if (numbIters > 100) {
 				numbIters += 0;
@@ -77,13 +74,11 @@ public class AI
 				double exploreRating = exploreWeight*Math.Sqrt(Math.Log(initalState.totGames+1)/(games+0.1));
 
 				double totalScore = score+exploreRating;
-				//Debug.Log ("Child " + i + " has a score of " + totalScore);
 				if (totalScore > bestScore){
 					bestScore = totalScore;
 					bestIndex = i;
 				}
 			}
-			//Debug.Log ("Best Child was " + bestIndex);
 			AIState bestChild = children[bestIndex];
 
 			while(bestChild.children.Count > 0)
@@ -118,7 +113,6 @@ public class AI
 			if (bestChild.depth > maxDepth)
 				maxDepth = bestChild.depth;
 			rollout(bestChild);
-			//Debug.Log ("Rollout finished");
 		}
 
 			
@@ -127,34 +121,27 @@ public class AI
 		for(int i = 0; i < children.Count; i++)
 		{
 			int games = children[i].totGames;
-			Debug.Log ("Child " + i + " played " + games + " times. It won " + (double)children[i].wins/(double)games + ".");
 			if(games >= mostGames)
 			{
 				mostGames = games;
 				bestMove = i;
 			}
 		}
-		Debug.Log ("Child Selected: " + bestMove);
-		Debug.Log ("Max Depth reached: " + maxDepth);
-
 		return children[bestMove];
 	}
 
 	void rollout(AIState rolloutStart)
 	{
-		//Debug.Log ("Rollout started");
 		bool terminalStateFound = false;
 		List<AIState> children = rolloutStart.generateChildren();
-		//rolloutStart.children = children;	
 
 		if (children.Count == 0) {
-			//Debug.Log("Error: No Children generated from inital state.");
+			Debug.Log ("ERROR: No Children generated from inital state.");
 			return;
 		}
 		int count = 0;
 		while(!terminalStateFound)
 		{
-			//Debug.Log (count);
 			count++;
 			if (count >= maxRollout) {
 				rolloutStart.addDraw ();
@@ -162,18 +149,14 @@ public class AI
 			}
 			int index = randGen.Next(children.Count);
 			int endResult = children[index].terminal ();
-			//Debug.Log ("terminal checked.");
 			if(endResult > 0)
 			{
 				terminalStateFound = true;
 				if(endResult == rolloutStart.playerIndex) rolloutStart.addWin();
 				else rolloutStart.addLoss();
 			} else {
-				//Debug.Log (count);
 				children = children [index].generateChildren();
-				//Debug.Log ("children generated.");
 				if (children.Count == 0) {
-					//Debug.Log("Error: End State not recognised.");
 					break;
 				}
 			}
@@ -183,7 +166,6 @@ public class AI
 		{
 			child.children = new List<AIState>();
 		}
-		//rolloutStart.children = null;
 	}
 }
 
