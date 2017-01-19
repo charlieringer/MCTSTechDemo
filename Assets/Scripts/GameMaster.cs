@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using System.Threading;
 
 abstract public class GameMaster : MonoBehaviour {
+	//Stores all the variables needed for the Game that are shared between the two.
 	protected AI brain = new AI();
 	protected bool gamePlaying = true;
 	protected int playerIndx;

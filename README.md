@@ -17,6 +17,7 @@ The Order player wins the game if there exists an unbroken row of 5 stones of th
 This game is a good test for a MCTS Agent because it asymmetric and thus provides two different modes of play. It is also interesting because it has higher branching factor, there are 64! ways to arrange two colours of stones on a 6x6 board, but a low maximum number of moves, the game is guaranteed to end after 36 moves. This high branching factor means that often the agent can perform poorly, especially when playing as Chaos, in the early game. However, if it can survive until the mid-game the branching factor reduces to the point that the agent becomes proficient at the game. 
 
 Simple Go
+
 The “Simple Go” game presented in the project is a game of my own design based heavily on the ancient game Go. It is played on a 6x6 board and unlike it’s ancestor is played on the grid squared rather than the intersections.  To play, first the player must pick to play with either the white or black stones (unlike in Order and Chaos where either can be chosen). On a player’s turn they choose one of the grid squares in which to place one of their stones. 
 
 If this move caused a single stone or group of connected stones of the opponent’s colour to be surrounded orthogonally by the player’s pieces these stones become ‘captured’, are removed from the board, and added to the capturing players score. However, a player is unable to place a stone in a square which would cause the automatic capture of that stone (although, if this placement allows the capture of opposing stones first this is allowable as the placed stone will no longer be surrounded). 
@@ -27,7 +28,8 @@ Simple Go provides a Go like game in which concepts from the original game are r
 
 Tech
 
-The main AI tech used for this project is MCTS (although some amount of graph search was used when determining which stones belonged to a set and if that set was surrounded). Monte Carlo Tree Search is  …
+The main AI tech used for this project is MCTS (although some amount of graph search was used when determining which stones belonged to a set and if that set was surrounded). Monte Carlo Tree Search is a useful tool for developing game AI because it is an algorithm which very general. Briefly, it’s a heuristic search algorithm which focuses on the most promising moves whilst still exploring unknown options. It’s expansion of nodes is based on random play outs of games. 
+ 
 
 Using this Project
 
