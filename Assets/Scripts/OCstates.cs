@@ -6,30 +6,21 @@ public class OCState : State
 {
 	public OCState()
 	{
+		//Makes a blank game state (for the start of the game)
 		numbPiecesPlayed = 0;
 	}
 
 	public OCState (int[,] _board, int _numbPiecesPlayed, int[] _lastPiecePlayed)
 	{
+		//For the AI. So the state is build from previous values (which are passed in during child generation. 
 		board = _board;
 		numbPiecesPlayed = _numbPiecesPlayed;
 		lastPiecePlayed = _lastPiecePlayed;
-		int localPieceCount = 0;
-		for (int x = 0; x < 6; x++) {
-			for (int y = 0; y < 6; y++)
-			{
-				if (board [x, y] > 0) {
-					localPieceCount++;
-				}
-			}
-		}
-		if (localPieceCount != numbPiecesPlayed) {
-			Debug.Log ("ERROR: Piece count mismatch");
-		}
 	}
 
 	public override bool checkGameEnd()
 	{
+		//If we just call check game end we used the last played piece.
 		return checkGameEnd(lastPiecePlayed);
 	}
 
@@ -65,9 +56,12 @@ public class OCState : State
 				countD2 = 0; //It is impossible to win so set count to 0
 
 		}
+		//if either direction is at least 5
 		if (countX >= 5 || countY >= 5 || countD1 >= 5 || countD2 >= 5) {
+			//The game is over (Order wins)
 			return true;
 		}
+		//Otherwise game is still going on.
 		return false;
 	}
 }
@@ -75,6 +69,7 @@ public class OCState : State
 
 public class OCAIState : AIState
 {
+	//Contains a game state
 	public OCState state;
 
 	public OCAIState(OCState _state, int pIndex, AIState _parent, int _depth) : base(pIndex, _parent, _depth)
@@ -84,45 +79,61 @@ public class OCAIState : AIState
 
 	public override List<AIState> generateChildren()
 	{
+		//Generates all possible child states from this state
 		List<AIState> children = new List<AIState> ();
-
+		//Swap the player
 		int newPIndx = 0;
 		if (playerIndex == 1)
 			newPIndx = 2;
 		else
 			newPIndx = 1;
+		//Increment the number of peices played
 		int newNumbPieces = state.numbPiecesPlayed+1;
-
+		//Loop through all of the board pieces
 		for (int x = 0; x < 6; x++) {
 			for (int y = 0; y < 6; y++) {
+				//Get the piece
 				int pieceAtPosition = state.getBoard () [x, y];
+				//if it is 0 (therefore empty)
 				if (pieceAtPosition == 0) {
+					//We have a possible peice to play
+					//So clone the board
 					int[,] newBoard = (int[,])state.getBoard().Clone ();
+					//and simululate playing a white piece
 					newBoard [x, y] = 1;
 					OCState childState = new OCState (newBoard, newNumbPieces, new int[3]{ x, y, 1});
 					OCAIState childAIState = new OCAIState (childState, newPIndx, this, depth+1);
+					//And add this state as a child
 					children.Add (childAIState);
-
+					//Then simululate playing a black piece
 					int[,] newBoard2 = (int[,])state.getBoard().Clone ();
 					newBoard2 [x, y] = 2;
 					OCState childState2 = new OCState (newBoard2, newNumbPieces, new int[3]{ x, y, 2});
 					OCAIState childAIState2 = new OCAIState (childState2, newPIndx, this, depth+1);
+					//And add this state as a child
 					children.Add (childAIState2);
 				}
 			}
 		}
+		//Set the children of this node
 		this.children = children;
+		//Also return it.
 		return children;
 	}
 
 	public override int terminal()
 	{
+		//If the game is over
 		if (state.checkGameEnd ()) {
+			//1 has won
 			return 1;
 		}
+		//If the board is full
 		if (state.numbPiecesPlayed == 36) {
+			//2 has won
 			return 2;
 		}
+		//Other return 0 (game still going)
 		return 0;
 	}
 }

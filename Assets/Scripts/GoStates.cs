@@ -11,29 +11,20 @@ public class GOState : State
 
 	public GOState()
 	{
+		//Makes a blank game state (for the start of the game)
 		numbPiecesPlayed = 0;
 	}
 
 	public GOState (int[,] _board, int _numbPiecesPlayed, int[] _lastPiecePlayed, int[] oldScores)
 	{
+		//For the AI. So the state is build from previous values (which are passed in during child generation. 
 		whiteCaptureScore = oldScores [0];
 		blackCaptureScore = oldScores [1];
 		board = _board;
 		numbPiecesPlayed = _numbPiecesPlayed;
 		lastPiecePlayed = _lastPiecePlayed;
-		int localPieceCount = 0;
-		for (int x = 0; x < 6; x++) {
-			for (int y = 0; y < 6; y++)
-			{
-				if (board [x, y] > 0) {
-					localPieceCount++;
-				}
-			}
-		}
+		//Check is any stones are captured.
 		checkForCaptures (_lastPiecePlayed);
-		if (localPieceCount != numbPiecesPlayed) {
-			Debug.Log ("ERROR: Piece count mismatch");
-		}
 	}
 
 	public void checkForCaptures (int[] _lastPiecePlayed)

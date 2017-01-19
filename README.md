@@ -34,3 +34,6 @@ The main AI tech used for this project is MCTS (although some amount of graph se
 Using this Project
 
 To use this project please download the source code and load in Unity. There you can run the MainMenu scene which will give you the option to choose between playing Go and Order and Chaos. You will then be asked to select a side (Black/White and Order/Chaos respectively). Upon selection, the game will be loaded and, if the AI is to play first, the AI will select a move. To play a move, hover your mouse over a grid square, it will be highlighted green if it is selectable. Then click to place your stone. When playing Order and Chaos pressing the space bar will switch between colours.
+
+Tech Demo
+https://drive.google.com/open?id=0B7bTGaYzR127RjM0eUlUeUhKdDg
